@@ -77,7 +77,7 @@ def compress(
     and the file is already compressed, it is simply copied to the destination.
 
     Args:
-        ffeditc_exe_filepath (str): Path to the TK.MSTS.Tokens DLL.
+        ffeditc_exe_filepath (str): Path to the ffeditc_unicode.exe executable.
         input_filepath (str): Path to the input file.
         output_filepath (Optional[str]): Destination path for the compressed file,
                                          or None to compress in place.
@@ -87,9 +87,7 @@ def compress(
               and was either copied or left unchanged.
 
     Raises:
-        EnvironmentError: If required runtime dependencies (Mono or .NET) are missing.
-        FileNotFoundError: If the input file or specified DLL file is not found.
-        ImportError: If the DLL fails to load.
+        FileNotFoundError: If the input file or the specified ffeditc_unicode.exe is not found.
         OSError: If file operations fail.
     """
     already_compressed = is_compressed(input_filepath)
@@ -132,7 +130,7 @@ def decompress(
     and the file is already decompressed, it is simply copied to the destination.
 
     Args:
-        ffeditc_exe_filepath (str): Path to the TK.MSTS.Tokens DLL.
+        ffeditc_exe_filepath (str): Path to the ffeditc_unicode.exe executable.
         input_filepath (str): Path to the input file.
         output_filepath (Optional[str]): Destination path for the decompressed file,
                                          or None to decompress in place.
@@ -142,9 +140,7 @@ def decompress(
               and was either copied or left unchanged.
 
     Raises:
-        EnvironmentError: If required runtime dependencies (Mono or .NET) are missing.
-        FileNotFoundError: If the input file or specified DLL file is not found.
-        ImportError: If the DLL fails to load.
+        FileNotFoundError: If the input file or the specified ffeditc_unicode.exe is not found.
         OSError: If file operations fail.
     """
     currently_compressed = is_compressed(input_filepath)
