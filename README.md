@@ -33,11 +33,7 @@ If you have downloaded a `.whl` file from the [Releases](https://github.com/pgro
 pip install path/to/pyffeditc-<version>‑py3‑none‑any.whl
 ```
 
-Replace `<version>` with the actual version number in the filename. For example:
-
-```sh
-pip install path/to/pyffeditc-0.1.0-py3-none-any.whl
-```
+Replace `<version>` with the actual version number in the filename.
 
 ### Install from source
 

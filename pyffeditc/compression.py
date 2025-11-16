@@ -97,7 +97,7 @@ def compress(
             return False
         
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            tmp_filepath = tmp.name
+            tmp_filepath = tmp.name + ".s"
         
         try:
             wrapper.compress(input_filepath, tmp_filepath, ffeditc_exe_filepath)
@@ -150,7 +150,7 @@ def decompress(
             return False
         
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            tmp_filepath = tmp.name
+            tmp_filepath = tmp.name + ".s"
         
         try:
             wrapper.decompress(input_filepath, tmp_filepath, ffeditc_exe_filepath)

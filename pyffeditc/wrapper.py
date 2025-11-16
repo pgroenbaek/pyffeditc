@@ -28,30 +28,37 @@ def compress(input_path: str, output_path: str, ffeditc_exe_path: str) -> bool:
     Args:
         input_path (str): Path to the uncompressed input file.
         output_path (str): Path where the compressed file will be saved.
-        ffeditc_exe_path (str): Path to the TK.MSTS.Tokens DLL.
+        ffeditc_exe_path (str): Path to the ffeditc_unicode.exe executable.
 
     Raises:
-        EnvironmentError: If required runtime dependencies are missing.
-        FileNotFoundError: If the DLL cannot be found.
-        ImportError: If the DLL cannot be loaded.
+        FileNotFoundError: If the input file or the specified ffeditc_unicode.exe is not found.
+        OSError: If file operations fail.
 
     Returns:
         bool: True if compression succeeded, False otherwise.
     """
-    directory = os.path.dirname(ffeditc_exe_path)
-    executable = os.path.basename(ffeditc_exe_path)
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"No such file or directory: '{input_path}")
+    
+    output_directory = os.path.dirname(output_path)
+
+    if not os.path.isdir(output_directory):
+        raise FileNotFoundError(f"No such file or directory: '{output_directory}")
+
+    if not os.path.exists(ffeditc_exe_path):
+        raise FileNotFoundError(f"No such file or directory: '{ffeditc_exe_path}")
+
+    executable_dir = os.path.dirname(ffeditc_exe_path)
+    executable_name = os.path.basename(ffeditc_exe_path)
 
     try:
         result = subprocess.run(
-            [executable, input_path, "/c", "/o:" + output_path],
-            cwd=directory,
+            [executable_name, input_path, "/c", "/o:" + output_path],
+            cwd=executable_dir,
             capture_output=True,
             text=True,
             check=True
         )
-
-        print("Standard output:\n", result.stdout)
-        print("Standard error:\n", result.stderr)
         return True
     except subprocess.CalledProcessError as e:
         print(f"Command failed with exit code {e.returncode}")
@@ -66,30 +73,37 @@ def decompress(input_path: str, output_path: str, ffeditc_exe_path: str) -> bool
     Args:
         input_path (str): Path to the compressed input file.
         output_path (str): Path where the decompressed file will be saved.
-        ffeditc_exe_path (str): Path to the TK.MSTS.Tokens DLL.
+        ffeditc_exe_path (str): Path to the ffeditc_unicode.exe executable.
 
     Raises:
-        EnvironmentError: If required runtime dependencies are missing.
-        FileNotFoundError: If the DLL cannot be found.
-        ImportError: If the DLL cannot be loaded.
+        FileNotFoundError: If the input file or the specified ffeditc_unicode.exe is not found.
+        OSError: If file operations fail.
 
     Returns:
         bool: True if decompression succeeded, False otherwise.
     """
-    directory = os.path.dirname(ffeditc_exe_path)
-    executable = os.path.basename(ffeditc_exe_path)
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"No such file or directory: '{input_path}")
+    
+    output_directory = os.path.dirname(output_path)
+
+    if not os.path.isdir(output_directory):
+        raise FileNotFoundError(f"No such file or directory: '{output_directory}")
+
+    if not os.path.exists(ffeditc_exe_path):
+        raise FileNotFoundError(f"No such file or directory: '{ffeditc_exe_path}")
+
+    executable_dir = os.path.dirname(ffeditc_exe_path)
+    executable_name = os.path.basename(ffeditc_exe_path)
 
     try:
         result = subprocess.run(
-            [executable, input_path, "/u", "/o:" + output_path],
-            cwd=directory,
+            [executable_name, input_path, "/u", "/o:" + output_path],
+            cwd=executable_dir,
             capture_output=True,
             text=True,
             check=True
         )
-
-        print("Standard output:\n", result.stdout)
-        print("Standard error:\n", result.stderr)
         return True
     except subprocess.CalledProcessError as e:
         print(f"Command failed with exit code {e.returncode}")
