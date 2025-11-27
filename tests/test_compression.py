@@ -32,37 +32,37 @@ def sample_file(tmp_path):
 
 
 @pytest.fixture
-def dll_file(tmp_path):
+def exe_file(tmp_path):
     f = tmp_path / "ffeditc_unicode.exe"
     f.write_text("dummy exe")
     return str(f)
 
 
-def test_compress_already_compressed_with_output(monkeypatch, sample_file, dll_file, tmp_path):
+def test_compress_already_compressed_with_output(monkeypatch, sample_file, exe_file, tmp_path):
     monkeypatch.setattr(pyffeditc, "is_compressed", lambda path: True)
 
     called = {}
     monkeypatch.setattr(pyffeditc.wrapper, "compress", lambda inp, out, dll: called.setdefault("compress", True))
 
     out = tmp_path / "out.s"
-    result = pyffeditc.compress(dll_file, sample_file, str(out))
+    result = pyffeditc.compress(exe_file, sample_file, str(out))
     assert result is False
     assert "compress" not in called
     assert os.path.exists(out)  # should just copy
 
 
-def test_compress_already_compressed_inplace(monkeypatch, sample_file, dll_file):
+def test_compress_already_compressed_inplace(monkeypatch, sample_file, exe_file):
     monkeypatch.setattr(pyffeditc, "is_compressed", lambda path: True)
 
     called = {}
     monkeypatch.setattr(pyffeditc.wrapper, "compress", lambda inp, out, dll: called.setdefault("compress", True))
 
-    result = pyffeditc.compress(dll_file, sample_file, None)
+    result = pyffeditc.compress(exe_file, sample_file, None)
     assert result is False
     assert "compress" not in called
 
 
-def test_compress_not_compressed_with_output(monkeypatch, sample_file, dll_file, tmp_path):
+def test_compress_not_compressed_with_output(monkeypatch, sample_file, exe_file, tmp_path):
     monkeypatch.setattr(pyffeditc, "is_compressed", lambda path: False)
 
     called = {}
@@ -75,13 +75,13 @@ def test_compress_not_compressed_with_output(monkeypatch, sample_file, dll_file,
     monkeypatch.setattr(pyffeditc.wrapper, "compress", fake_compress)
 
     out = tmp_path / "out.s"
-    result = pyffeditc.compress(dll_file, sample_file, str(out))
+    result = pyffeditc.compress(exe_file, sample_file, str(out))
     assert result is True
     assert "compress" in called
     assert os.path.exists(out)
 
 
-def test_compress_not_compressed_inplace(monkeypatch, sample_file, dll_file):
+def test_compress_not_compressed_inplace(monkeypatch, sample_file, exe_file):
     monkeypatch.setattr(pyffeditc, "is_compressed", lambda path: False)
 
     called = {}
@@ -93,25 +93,25 @@ def test_compress_not_compressed_inplace(monkeypatch, sample_file, dll_file):
 
     monkeypatch.setattr(pyffeditc.wrapper, "compress", fake_compress)
 
-    result = pyffeditc.compress(dll_file, sample_file, None)
+    result = pyffeditc.compress(exe_file, sample_file, None)
     assert result is True
     assert "compress" in called
 
 
-def test_decompress_already_decompressed_with_output(monkeypatch, sample_file, dll_file, tmp_path):
+def test_decompress_already_decompressed_with_output(monkeypatch, sample_file, exe_file, tmp_path):
     monkeypatch.setattr(pyffeditc, "is_compressed", lambda path: False)
 
     called = {}
     monkeypatch.setattr(pyffeditc.wrapper, "decompress", lambda inp, out, dll: called.setdefault("decompress", True))
 
     out = tmp_path / "out.s"
-    result = pyffeditc.decompress(dll_file, sample_file, str(out))
+    result = pyffeditc.decompress(exe_file, sample_file, str(out))
     assert result is False
     assert "decompress" not in called
     assert os.path.exists(out)  # should just copy
 
 
-def test_decompress_not_decompressed_inplace(monkeypatch, sample_file, dll_file):
+def test_decompress_not_decompressed_inplace(monkeypatch, sample_file, exe_file):
     monkeypatch.setattr(pyffeditc, "is_compressed", lambda path: True)
 
     called = {}
@@ -123,7 +123,7 @@ def test_decompress_not_decompressed_inplace(monkeypatch, sample_file, dll_file)
 
     monkeypatch.setattr(pyffeditc.wrapper, "decompress", fake_decompress)
 
-    result = pyffeditc.decompress(dll_file, sample_file, None)
+    result = pyffeditc.decompress(exe_file, sample_file, None)
     assert result is True
     assert "decompress" in called
 
